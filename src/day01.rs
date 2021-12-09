@@ -8,7 +8,7 @@ fn read_profile_file() -> Vec<u32> {
         .expect("Something went wrong reading the file");
 
     let depths: Vec<u32> = contents.split("\n").map(|x| x.parse::<u32>().unwrap()).collect();
-    return depths
+    depths
 }
 
 fn increase_values(depths: &[u32]) -> i32 {
@@ -21,7 +21,7 @@ fn increase_values(depths: &[u32]) -> i32 {
             increased_measurements += 1;
         }
     }
-    return increased_measurements;
+    increased_measurements
 }
 
 fn increase_values_moving_window(depths: &[u32]) -> i32 {
@@ -33,7 +33,7 @@ fn increase_values_moving_window(depths: &[u32]) -> i32 {
         let sum = depths[index - 2] + depths[index - 1] + depths[index];
         depths_moving_window.push(sum)
     }
-    return increase_values(&depths_moving_window);
+    increase_values(&depths_moving_window)
 }
 
 pub fn solution_day01() {
