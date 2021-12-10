@@ -46,7 +46,6 @@ fn move_position_and_aim(input: &Vec<String>, calculate_aim: bool) -> i32 {
                 _ => panic!("The input is not supported!")
             }
         }
-        let sum = position * depth;
     }
     position * depth
 }
