@@ -1,11 +1,9 @@
 use std::fs;
-use std::num;
 use std::path::Path;
 
 fn read_input_file() -> Vec<String> {
     let filename = Path::new("./data/day03.txt");
-    let contents = fs::read_to_string(filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
 
     let inputs: Vec<String> = contents.lines().map(|x| x.to_string()).collect();
     inputs
@@ -14,20 +12,26 @@ fn read_input_file() -> Vec<String> {
 pub fn solution_day03() {
     let input = read_input_file();
     let result_day03_part1 = power_supporting(&input);
-    println!("The solution for the 1st part of the puzzle from day 03 is '{}'!", result_day03_part1);
+    println!(
+        "The solution for the 1st part of the puzzle from day 03 is '{}'!",
+        result_day03_part1
+    );
     let result_day03_part2 = life_support_rating(&input);
-    println!("The solution for the 2nd part of the puzzle from day 03 is '{}'!", result_day03_part2);
+    println!(
+        "The solution for the 2nd part of the puzzle from day 03 is '{}'!",
+        result_day03_part2
+    );
 }
 
 fn most_and_least_common_value(position: Vec<char>) -> [&'static str; 2] {
     let mut ones = 0;
     let mut zeros = 0;
-    
+
     for c in position.iter() {
         match c {
             '1' => ones += 1,
             '0' => zeros += 1,
-            _ => panic!()
+            _ => panic!(),
         }
     }
 
@@ -40,13 +44,13 @@ fn most_and_least_common_value(position: Vec<char>) -> [&'static str; 2] {
     let value_inverted = match value {
         "1" => "0",
         "0" => "1",
-        _ => panic!()
+        _ => panic!(),
     };
 
     [value, value_inverted]
 }
 
-fn power_supporting(input: &Vec<String>) -> i32 {  
+fn power_supporting(input: &Vec<String>) -> i32 {
     let input_length = input.first().unwrap().len();
     let mut gamma_rate = String::new();
     let mut epsilon_rate = String::new();
@@ -58,12 +62,13 @@ fn power_supporting(input: &Vec<String>) -> i32 {
             values_at_position.push(value);
         }
 
-        let [gamma_value_at_position, epsilon_value_at_position] = most_and_least_common_value(values_at_position);
+        let [gamma_value_at_position, epsilon_value_at_position] =
+            most_and_least_common_value(values_at_position);
 
         gamma_rate.push_str(gamma_value_at_position);
         epsilon_rate.push_str(epsilon_value_at_position);
     }
-      
+
     let gamma_rate_decimal = i32::from_str_radix(&gamma_rate, 2).unwrap();
     let epsilon_rate_decimal = i32::from_str_radix(&epsilon_rate, 2).unwrap();
 
@@ -86,7 +91,18 @@ fn life_support_rating(input: &Vec<String>) -> i32 {
                 oxygen_values_at_position.push(value);
             }
             let [most_common_value, _] = most_and_least_common_value(oxygen_values_at_position);
-            oxygen_generator_values = oxygen_generator_values.into_iter().filter(|x| x.chars().nth(index).unwrap().to_owned().to_string().as_str() == most_common_value).collect();
+            oxygen_generator_values = oxygen_generator_values
+                .into_iter()
+                .filter(|x| {
+                    x.chars()
+                        .nth(index)
+                        .unwrap()
+                        .to_owned()
+                        .to_string()
+                        .as_str()
+                        == most_common_value
+                })
+                .collect();
         }
 
         let mut co2_values_at_position: Vec<char> = Vec::new();
@@ -96,12 +112,22 @@ fn life_support_rating(input: &Vec<String>) -> i32 {
                 co2_values_at_position.push(value);
             }
             let [_, least_common_value] = most_and_least_common_value(co2_values_at_position);
-            co2_scrubber_values = co2_scrubber_values.into_iter().filter(|x| x.chars().nth(index).unwrap().to_owned().to_string().as_str() == least_common_value).collect();
+            co2_scrubber_values = co2_scrubber_values
+                .into_iter()
+                .filter(|x| {
+                    x.chars()
+                        .nth(index)
+                        .unwrap()
+                        .to_owned()
+                        .to_string()
+                        .as_str()
+                        == least_common_value
+                })
+                .collect();
+        }
     }
-        
-
-    }
-    let oxygen_generator_rating_decimal = i32::from_str_radix(&oxygen_generator_values[0], 2).unwrap();
+    let oxygen_generator_rating_decimal =
+        i32::from_str_radix(&oxygen_generator_values[0], 2).unwrap();
     let co2_scrubber_rating_decimal = i32::from_str_radix(&co2_scrubber_values[0], 2).unwrap();
     co2_scrubber_rating_decimal * oxygen_generator_rating_decimal
 }
@@ -111,7 +137,10 @@ mod tests {
 
     #[test]
     fn test_power_supporting() {
-        let input = ["00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000", "11001", "00010", "01010"];
+        let input = [
+            "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
+            "11001", "00010", "01010",
+        ];
         let input_converted = input.iter().map(|x| x.to_string()).collect::<Vec<String>>();
         let result = power_supporting(&input_converted);
         assert_eq!(198, result);
@@ -119,8 +148,12 @@ mod tests {
 
     #[test]
     fn test_life_support_rating() {
-        let input = ["00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000", "11001", "00010", "01010"];
+        let input = [
+            "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
+            "11001", "00010", "01010",
+        ];
         let input_converted = input.iter().map(|x| x.to_string()).collect::<Vec<String>>();
         let result = life_support_rating(&input_converted);
-        assert_eq!(230, result);    }
+        assert_eq!(230, result);
+    }
 }

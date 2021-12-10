@@ -1,18 +1,19 @@
-
 use std::fs;
 use std::path::Path;
 
 fn read_profile_file() -> Vec<u32> {
     let filename = Path::new("./data/day01.txt");
-    let contents = fs::read_to_string(filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
 
-    let depths: Vec<u32> = contents.split("\n").map(|x| x.parse::<u32>().unwrap()).collect();
+    let depths: Vec<u32> = contents
+        .split("\n")
+        .map(|x| x.parse::<u32>().unwrap())
+        .collect();
     depths
 }
 
 fn increase_values(depths: &[u32]) -> i32 {
-    let mut increased_measurements = 0; 
+    let mut increased_measurements = 0;
     for (index, _depth) in depths.iter().enumerate() {
         if index == 0 {
             continue;
@@ -39,10 +40,16 @@ fn increase_values_moving_window(depths: &[u32]) -> i32 {
 pub fn solution_day01() {
     let depths = read_profile_file();
     let result_day01_part1 = increase_values(&depths);
-    println!("The solution for the 1st part of the puzzle from day 01 is '{}'!", result_day01_part1);
+    println!(
+        "The solution for the 1st part of the puzzle from day 01 is '{}'!",
+        result_day01_part1
+    );
 
     let result_day01_part2 = increase_values_moving_window(&depths);
-    println!("The solution for the 2nd part of the puzzle from day 01 is '{}'!", result_day01_part2);
+    println!(
+        "The solution for the 2nd part of the puzzle from day 01 is '{}'!",
+        result_day01_part2
+    );
 }
 
 #[cfg(test)]
@@ -69,7 +76,8 @@ mod tests {
 
     #[test]
     fn test_increase_values_moving_window_example() {
-        let result = increase_values_moving_window(&[199, 200, 208, 210, 200, 207, 240, 269, 260, 263]);
+        let result =
+            increase_values_moving_window(&[199, 200, 208, 210, 200, 207, 240, 269, 260, 263]);
         assert_eq!(5, result);
     }
 }
