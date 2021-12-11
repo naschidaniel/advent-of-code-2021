@@ -10,16 +10,16 @@ struct Bingo {
 #[derive(Debug)]
 struct Board {
     available_numbers: Vec<i32>,
-    column_0: [i32; 5],
-    column_1: [i32; 5],
-    column_2: [i32; 5],
-    column_3: [i32; 5],
-    column_4: [i32; 5],
-    row_0: [i32; 5],
-    row_1: [i32; 5],
-    row_2: [i32; 5],
-    row_3: [i32; 5],
-    row_4: [i32; 5],
+    column_0: Vec<i32>,
+    column_1: Vec<i32>,
+    column_2: Vec<i32>,
+    column_3: Vec<i32>,
+    column_4: Vec<i32>,
+    row_0: Vec<i32>,
+    row_1: Vec<i32>,
+    row_2: Vec<i32>,
+    row_3: Vec<i32>,
+    row_4: Vec<i32>,
 }
 
 fn read_input_file() -> Vec<String> {
@@ -57,19 +57,19 @@ pub fn solution_day04() {
             .collect::<Vec<i32>>();
         numbers.push(entry);
     }
-    println!("{:?}", numbers);
-
     let boards = numbers.chunks(5).collect::<Vec<_>>();
-    println!("{:?}", boards);
-
-    //let result_day03_part1 = power_supporting(&input);
-    //println!("The solution for the 1st part of the puzzle from day 03 is '{}'!", result_day03_part1);
+    let bingo = Bingo::init(boards, tips);
+    let result_day04_part1 = bingo.play();
+    println!(
+        "The solution for the 1st part of the puzzle from day 04 is '{}'!",
+        result_day04_part1
+    );
     //let result_day03_part2 = life_support_rating(&input);
     //println!("The solution for the 2nd part of the puzzle from day 03 is '{}'!", result_day03_part2);
 }
 
 impl Bingo {
-    fn init(input: Vec<Vec<[i32; 5]>>, tips: Vec<i32>) -> Self {
+    fn init(input: Vec<&[Vec<i32>]>, tips: Vec<i32>) -> Self {
         let mut new_bingo: Bingo = Bingo::default();
         new_bingo.tips = tips;
 
@@ -84,7 +84,6 @@ impl Bingo {
         let tips_len = self.tips.len();
         for i in 5..tips_len + 1 {
             for board in self.boards.iter() {
-                println!("{:?}", self.tips[0..i].to_vec());
                 if board.validate_board(self.tips[0..i].to_vec()) {
                     return board.calculate_score(self.tips[0..i].to_vec(), self.tips[i - 1]);
                 }
@@ -95,19 +94,19 @@ impl Bingo {
 }
 
 impl Board {
-    fn init_board(input_board: Vec<[i32; 5]>) -> Self {
+    fn init_board(input_board: &[Vec<i32>]) -> Self {
         let mut new_board = Board {
             available_numbers: vec![0; 25],
-            column_0: [0; 5],
-            column_1: [0; 5],
-            column_2: [0; 5],
-            column_3: [0; 5],
-            column_4: [0; 5],
-            row_0: [0; 5],
-            row_1: [0; 5],
-            row_2: [0; 5],
-            row_3: [0; 5],
-            row_4: [0; 5],
+            column_0: vec![0; 5],
+            column_1: vec![0; 5],
+            column_2: vec![0; 5],
+            column_3: vec![0; 5],
+            column_4: vec![0; 5],
+            row_0: vec![0; 5],
+            row_1: vec![0; 5],
+            row_2: vec![0; 5],
+            row_3: vec![0; 5],
+            row_4: vec![0; 5],
         };
 
         new_board.available_numbers = input_board.iter().flat_map(|x| x.iter()).cloned().collect();
@@ -199,12 +198,12 @@ mod tests {
     #[test]
     fn test_board_invalid() {
         let tips = vec![14, 21, 17, 24, 10];
-        let input_board = vec![
-            [14, 21, 17, 24, 4],
-            [10, 16, 15, 9, 19],
-            [18, 8, 23, 26, 20],
-            [22, 11, 13, 6, 5],
-            [2, 0, 12, 3, 7],
+        let input_board = &[
+            vec![14, 21, 17, 24, 4],
+            vec![10, 16, 15, 9, 19],
+            vec![18, 8, 23, 26, 20],
+            vec![22, 11, 13, 6, 5],
+            vec![2, 0, 12, 3, 7],
         ];
 
         let board = Board::init_board(input_board);
@@ -215,12 +214,12 @@ mod tests {
     #[test]
     fn test_board_valid() {
         let tips = vec![14, 21, 17, 24, 4];
-        let input_board = vec![
-            [14, 21, 17, 24, 4],
-            [10, 16, 15, 9, 19],
-            [18, 8, 23, 26, 20],
-            [22, 11, 13, 6, 5],
-            [2, 0, 12, 3, 7],
+        let input_board = &[
+            vec![14, 21, 17, 24, 4],
+            vec![10, 16, 15, 9, 19],
+            vec![18, 8, 23, 26, 20],
+            vec![22, 11, 13, 6, 5],
+            vec![2, 0, 12, 3, 7],
         ];
 
         let board = Board::init_board(input_board);
@@ -233,28 +232,28 @@ mod tests {
             7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19,
             3, 26, 1,
         ];
-        let input_board1 = vec![
-            [22, 13, 17, 11, 0],
-            [8, 2, 23, 4, 24],
-            [21, 9, 14, 16, 7],
-            [6, 10, 3, 18, 5],
-            [1, 12, 20, 15, 19],
+        let input_board1 = &[
+            vec![22, 13, 17, 11, 0],
+            vec![8, 2, 23, 4, 24],
+            vec![21, 9, 14, 16, 7],
+            vec![6, 10, 3, 18, 5],
+            vec![1, 12, 20, 15, 19],
         ];
 
-        let input_board2 = vec![
-            [3, 15, 0, 2, 22],
-            [9, 18, 13, 17, 5],
-            [19, 8, 7, 25, 23],
-            [20, 11, 10, 24, 4],
-            [14, 21, 16, 12, 6],
+        let input_board2 = &[
+            vec![3, 15, 0, 2, 22],
+            vec![9, 18, 13, 17, 5],
+            vec![19, 8, 7, 25, 23],
+            vec![20, 11, 10, 24, 4],
+            vec![14, 21, 16, 12, 6],
         ];
 
-        let input_board3 = vec![
-            [14, 21, 17, 24, 4],
-            [10, 16, 15, 9, 19],
-            [18, 8, 23, 26, 20],
-            [22, 11, 13, 6, 5],
-            [2, 0, 12, 3, 7],
+        let input_board3 = &[
+            vec![14, 21, 17, 24, 4],
+            vec![10, 16, 15, 9, 19],
+            vec![18, 8, 23, 26, 20],
+            vec![22, 11, 13, 6, 5],
+            vec![2, 0, 12, 3, 7],
         ];
 
         let bingo = Bingo::init(vec![input_board1, input_board2, input_board3], tips);
