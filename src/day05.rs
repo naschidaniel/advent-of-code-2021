@@ -1,6 +1,6 @@
 use std::fs;
 use std::path::Path;
-use std::collections::HashSet;
+use std::collections::HashMap;
 
 fn read_input_file() -> String {
     let filename = Path::new("./data/day05.txt");
@@ -73,11 +73,20 @@ impl Measurements {
 
     fn count_points_bigger_than_2(self) -> i32 {
         let segment_strings = self.segments.iter().map(|p| format!("{},{}", p.x, p.y)).collect::<Vec<String>>();
-        let segment_hashmap: HashSet<String> = segment_strings.iter().cloned().collect();
+        let mut locations = HashMap::new();
+
+        for i in segment_strings {
+            if locations.contains_key(&i) {
+                *locations.get_mut(&i).unwrap() += 1;
+                continue;
+            }
+            locations.insert(i, 1);
+        }
+
         let mut count = 0;
-        for element in segment_hashmap.iter() {
-            if segment_strings.iter().filter(|n| n == &element).count() >= 2 {
-                count += 1
+        for (_, v) in locations.iter() {
+            if v >= &2 {
+                count += 1;
             }
         }
         count
