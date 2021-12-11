@@ -55,6 +55,7 @@ fn move_position_and_aim(input: &Vec<String>, calculate_aim: bool) -> i32 {
 }
 
 mod tests {
+    #[allow(unused_imports)]
     use super::*;
 
     #[test]

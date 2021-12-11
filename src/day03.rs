@@ -133,6 +133,7 @@ fn life_support_rating(input: &Vec<String>) -> i32 {
 }
 
 mod tests {
+    #[allow(unused_imports)]
     use super::*;
 
     #[test]

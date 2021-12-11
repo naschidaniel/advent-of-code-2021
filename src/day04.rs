@@ -9,6 +9,7 @@ struct Bingo {
 
 #[derive(Debug)]
 struct Board {
+    attempts: i32,
     available_numbers: Vec<i32>,
     column_0: Vec<i32>,
     column_1: Vec<i32>,
@@ -20,6 +21,7 @@ struct Board {
     row_2: Vec<i32>,
     row_3: Vec<i32>,
     row_4: Vec<i32>,
+    score: i32,
 }
 
 fn read_input_file() -> Vec<String> {
@@ -58,14 +60,18 @@ pub fn solution_day04() {
         numbers.push(entry);
     }
     let boards = numbers.chunks(5).collect::<Vec<_>>();
-    let bingo = Bingo::init(boards, tips);
-    let result_day04_part1 = bingo.play();
+    let bingo_part1 = Bingo::init(boards.clone(), tips.clone());
+    let result_day04_part1 = bingo_part1.play("best");
     println!(
         "The solution for the 1st part of the puzzle from day 04 is '{}'!",
         result_day04_part1
     );
-    //let result_day03_part2 = life_support_rating(&input);
-    //println!("The solution for the 2nd part of the puzzle from day 03 is '{}'!", result_day03_part2);
+    let bingo_part2 = Bingo::init(boards.clone(), tips.clone());
+    let result_day04_part1 = bingo_part2.play("last");
+    println!(
+        "The solution for the 2nd part of the puzzle from day 04 is '{}'!",
+        result_day04_part1
+    );
 }
 
 impl Bingo {
@@ -80,22 +86,47 @@ impl Bingo {
         new_bingo
     }
 
-    fn play(self) -> i32 {
+    fn play(mut self, position: &str) -> i32 {
         let tips_len = self.tips.len();
         for i in 5..tips_len + 1 {
-            for board in self.boards.iter() {
+            for board in self.boards.iter_mut() {
+                if board.score > 0 {
+                    continue;
+                }
                 if board.validate_board(self.tips[0..i].to_vec()) {
-                    return board.calculate_score(self.tips[0..i].to_vec(), self.tips[i - 1]);
+                    let score = board.calculate_score(self.tips[0..i].to_vec(), self.tips[i - 1]);
+                    board.score = score;
+                    board.attempts = i.clone() as i32;
                 }
             }
         }
-        0
+        if position == "best" {
+            self.get_best_board()
+        } else if position == "last" {
+            self.get_last_board()
+        } else {
+            panic!()
+        }
+    }
+
+    fn get_best_board(mut self) -> i32 {
+        self.boards
+            .sort_by(|a, b| a.attempts.partial_cmp(&b.attempts).unwrap());
+        self.boards[0].score
+    }
+
+    fn get_last_board(mut self) -> i32 {
+        self.boards
+            .sort_by(|a, b| a.attempts.partial_cmp(&b.attempts).unwrap());
+        let len = self.boards.len() - 1;
+        self.boards[len].score
     }
 }
 
 impl Board {
     fn init_board(input_board: &[Vec<i32>]) -> Self {
         let mut new_board = Board {
+            attempts: 0,
             available_numbers: vec![0; 25],
             column_0: vec![0; 5],
             column_1: vec![0; 5],
@@ -107,6 +138,7 @@ impl Board {
             row_2: vec![0; 5],
             row_3: vec![0; 5],
             row_4: vec![0; 5],
+            score: 0,
         };
 
         new_board.available_numbers = input_board.iter().flat_map(|x| x.iter()).cloned().collect();
@@ -193,6 +225,7 @@ impl Board {
 }
 
 mod tests {
+    #[allow(unused_imports)]
     use super::*;
 
     #[test]
@@ -256,8 +289,12 @@ mod tests {
             vec![2, 0, 12, 3, 7],
         ];
 
-        let bingo = Bingo::init(vec![input_board1, input_board2, input_board3], tips);
-        let result = bingo.play();
-        assert_eq!(4512, result)
+        let bingo_part1 = Bingo::init(vec![input_board1, input_board2, input_board3], tips.clone());
+        let result = bingo_part1.play("best");
+        assert_eq!(4512, result);
+
+        let bingo_part2 = Bingo::init(vec![input_board1, input_board2, input_board3], tips.clone());
+        let result = bingo_part2.play("last");
+        assert_eq!(1924, result);
     }
 }
