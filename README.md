@@ -13,3 +13,5 @@ My solutions for [Advent of Code 2021](https://adventofcode.com/2021).
 --- Day 3: Binary Diagnostic ---
 
 --- Day 4: Giant Squid ---
+
+--- Day 5: Hydrothermal Venture ---,
