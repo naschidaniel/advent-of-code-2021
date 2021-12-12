@@ -67,10 +67,10 @@ pub fn solution_day04() {
         result_day04_part1
     );
     let bingo_part2 = Bingo::init(boards.clone(), tips.clone());
-    let result_day04_part1 = bingo_part2.play("last");
+    let result_day04_part2 = bingo_part2.play("last");
     println!(
         "The solution for the 2nd part of the puzzle from day 04 is '{}'!",
-        result_day04_part1
+        result_day04_part2
     );
 }
 
