@@ -17,3 +17,5 @@ Day 4: Giant Squid [Part1, Part2]
 Day 5: Hydrothermal Venture [Part1]
 
 Day 6: Lanternfish [Part1]
+
+Day 7: The Treachery of Whales
