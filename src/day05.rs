@@ -1,6 +1,6 @@
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
-use std::collections::HashMap;
 
 fn read_input_file() -> String {
     let filename = Path::new("./data/day05.txt");
@@ -12,7 +12,10 @@ pub fn solution_day05() {
     let input = read_input_file();
     let measurements = Measurements::init(input);
     let result_day05_part1 = measurements.count_points_bigger_than_2();
-    println!("The solution for the 1st part of the puzzle from day 05 is '{}'!", result_day05_part1);
+    println!(
+        "The solution for the 1st part of the puzzle from day 05 is '{}'!",
+        result_day05_part1
+    );
     // let result_day05_part2 = bingo_part2.play("last");
     // println!(
     //     "The solution for the 2nd part of the puzzle from day 05 is '{}'!",
@@ -67,12 +70,17 @@ impl Measurements {
             }
         }
         valid_values.sort_by(|a, b| a.x.partial_cmp(&b.x).unwrap());
-        Measurements { segments: valid_values }
-        
+        Measurements {
+            segments: valid_values,
+        }
     }
 
     fn count_points_bigger_than_2(self) -> i32 {
-        let segment_strings = self.segments.iter().map(|p| format!("{},{}", p.x, p.y)).collect::<Vec<String>>();
+        let segment_strings = self
+            .segments
+            .iter()
+            .map(|p| format!("{},{}", p.x, p.y))
+            .collect::<Vec<String>>();
         let mut locations = HashMap::new();
 
         for i in segment_strings {
@@ -100,11 +108,13 @@ mod tests {
     #[test]
     fn test_init_line_segment_x() {
         let line = "9,7 -> 7,7".to_string();
-        let test_segment = Measurements{ segments: vec![
-            Point { x: 7, y: 7 },
-            Point { x: 8, y: 7 },
-            Point { x: 9, y: 7 },
-        ]};
+        let test_segment = Measurements {
+            segments: vec![
+                Point { x: 7, y: 7 },
+                Point { x: 8, y: 7 },
+                Point { x: 9, y: 7 },
+            ],
+        };
         let segment = Measurements::init(line);
         assert_eq!(test_segment, segment)
     }
@@ -112,11 +122,13 @@ mod tests {
     #[test]
     fn test_init_line_segment_y() {
         let line = "1,1 -> 1,3".to_string();
-        let test_segment = Measurements{ segments: vec![
-            Point { x: 1, y: 1 },
-            Point { x: 1, y: 2 },
-            Point { x: 1, y: 3 },
-        ]};
+        let test_segment = Measurements {
+            segments: vec![
+                Point { x: 1, y: 1 },
+                Point { x: 1, y: 2 },
+                Point { x: 1, y: 3 },
+            ],
+        };
         let segment = Measurements::init(line);
         assert_eq!(test_segment, segment)
     }
@@ -124,34 +136,36 @@ mod tests {
     #[test]
     fn test_measurement() {
         let lines = "0,9 -> 5,9\n8,0 -> 0,8\n9,4 -> 3,4\n2,2 -> 2,1\n7,0 -> 7,4\n6,4 -> 2,0\n0,9 -> 2,9\n3,4 -> 1,4\n0,0 -> 8,8\n5,5 -> 8,2".to_string();
-        let test_segment = Measurements{ segments: vec![
-            Point { x: 0, y: 9 },
-            Point { x: 0, y: 9 },
-            Point { x: 1, y: 9 },
-            Point { x: 1, y: 9 },
-            Point { x: 1, y: 4 },
-            Point { x: 2, y: 9 },
-            Point { x: 2, y: 1 },
-            Point { x: 2, y: 2 },
-            Point { x: 2, y: 9 },
-            Point { x: 2, y: 4 },
-            Point { x: 3, y: 9 },
-            Point { x: 3, y: 4 },
-            Point { x: 3, y: 4 },
-            Point { x: 4, y: 9 },
-            Point { x: 4, y: 4 },
-            Point { x: 5, y: 9 },
-            Point { x: 5, y: 4 },
-            Point { x: 6, y: 4 },
-            Point { x: 7, y: 4 },
-            Point { x: 7, y: 0 },
-            Point { x: 7, y: 1 },
-            Point { x: 7, y: 2 },
-            Point { x: 7, y: 3 },
-            Point { x: 7, y: 4 },
-            Point { x: 8, y: 4 },
-            Point { x: 9, y: 4 },
-        ]};
+        let test_segment = Measurements {
+            segments: vec![
+                Point { x: 0, y: 9 },
+                Point { x: 0, y: 9 },
+                Point { x: 1, y: 9 },
+                Point { x: 1, y: 9 },
+                Point { x: 1, y: 4 },
+                Point { x: 2, y: 9 },
+                Point { x: 2, y: 1 },
+                Point { x: 2, y: 2 },
+                Point { x: 2, y: 9 },
+                Point { x: 2, y: 4 },
+                Point { x: 3, y: 9 },
+                Point { x: 3, y: 4 },
+                Point { x: 3, y: 4 },
+                Point { x: 4, y: 9 },
+                Point { x: 4, y: 4 },
+                Point { x: 5, y: 9 },
+                Point { x: 5, y: 4 },
+                Point { x: 6, y: 4 },
+                Point { x: 7, y: 4 },
+                Point { x: 7, y: 0 },
+                Point { x: 7, y: 1 },
+                Point { x: 7, y: 2 },
+                Point { x: 7, y: 3 },
+                Point { x: 7, y: 4 },
+                Point { x: 8, y: 4 },
+                Point { x: 9, y: 4 },
+            ],
+        };
         let segment = Measurements::init(lines);
         assert_eq!(test_segment, segment)
     }
@@ -162,6 +176,5 @@ mod tests {
         let measurements = Measurements::init(lines);
         let result = measurements.count_points_bigger_than_2();
         assert_eq!(5, result)
-
     }
 }
