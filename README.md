@@ -6,12 +6,14 @@ My solutions for [Advent of Code 2021](https://adventofcode.com/2021).
 
 ## Solutions
 
---- Day 1: Sonar Sweep ---
+Day 1: Sonar Sweep [Part1, Part2]
 
---- Day 2: Dive! ---
+Day 2: Dive! [Part1, Part2]
 
---- Day 3: Binary Diagnostic ---
+Day 3: Binary Diagnostic [Part1, Part2]
 
---- Day 4: Giant Squid ---
+Day 4: Giant Squid [Part1, Part2]
 
---- Day 5: Hydrothermal Venture ---,
+Day 5: Hydrothermal Venture [Part1]
+
+Day 6: Lanternfish 
