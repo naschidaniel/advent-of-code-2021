@@ -44,7 +44,8 @@ impl LanternFishSwarm {
 
     fn simulation(self, days: i32) -> LanternFishSwarm {
         let mut fishes_state = self.fishes.clone();
-        for _ in 0..days {
+        for d in 0..days {
+            println!("Calculate solution for day {}", d);
             let fishes_len = fishes_state.len();
             for index in 0..fishes_len {
                 fishes_state[index] -= 1;

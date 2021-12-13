@@ -4,6 +4,22 @@
 
 My solutions for [Advent of Code 2021](https://adventofcode.com/2021).
 
+## Development
+
+```
+cargo test
+cargo run 01
+```
+
+## Production
+
+```
+cargo build --release
+
+mv to main folder
+./advent-of-code run 01
+```
+
 ## Solutions
 
 Day 1: Sonar Sweep [Part1, Part2]
