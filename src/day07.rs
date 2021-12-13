@@ -20,6 +20,18 @@ pub fn solution_day07() {
         "The solution for the 1st part of the puzzle from day 07 is '{}'!",
         result_day07_part1
     );
+
+    let crabs = Crabs::init(input.clone());
+    let mut costs = Vec::new();
+    for i in 0..crabs.positions.len() {
+        let new_costs = crabs.real_cost_for_position(i);
+        costs.push(new_costs)
+    }
+    let result_day07_part2 = costs.iter().min().unwrap();
+    println!(
+        "The solution for the 2nd part of the puzzle from day 07 is '{}'!",
+        result_day07_part2
+    );
 }
 
 #[derive(Debug, PartialEq)]
@@ -44,6 +56,16 @@ impl Crabs {
         self.positions
             .iter()
             .map(|x| (x - position as i32).abs())
+            .sum::<i32>()
+    }
+
+    fn real_cost_for_position(&self, position: usize) -> i32 {
+        self.positions
+            .iter()
+            .map(|x| {
+                let distance = (x - position as i32).abs();
+                (0..distance + 1).collect::<Vec<_>>().iter().sum::<i32>()
+            })
             .sum::<i32>()
     }
 }
@@ -82,5 +104,21 @@ mod tests {
         let crabs = Crabs::init(input.clone());
         let result = crabs.minimize_cost_for_position(10);
         assert_eq!(71, result);
+    }
+
+    #[test]
+    fn test_real_cost_positions_2() {
+        let input = "16,1,2,0,4,2,7,1,2,14".to_string();
+        let crabs = Crabs::init(input.clone());
+        let result = crabs.real_cost_for_position(2);
+        assert_eq!(206, result);
+    }
+
+    #[test]
+    fn test_real_cost_positions_5() {
+        let input = "16,1,2,0,4,2,7,1,2,14".to_string();
+        let crabs = Crabs::init(input.clone());
+        let result = crabs.real_cost_for_position(5);
+        assert_eq!(168, result);
     }
 }
