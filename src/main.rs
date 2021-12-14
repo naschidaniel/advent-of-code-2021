@@ -8,6 +8,7 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 fn main() {
     let start_time = Instant::now();
@@ -21,6 +22,7 @@ fn main() {
         5 => day05::solution_day05(),
         6 => day06::solution_day06(),
         7 => day07::solution_day07(),
+        8 => day08::solution_day08(),
         _ => panic!("There is no solution for this day {}!", args[1]),
     }
     let end_time = start_time.elapsed();
