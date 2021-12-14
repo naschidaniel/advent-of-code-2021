@@ -13,19 +13,19 @@ pub fn solution_day06() {
     let result_day06_part1 = swarm.simulation(80);
     println!(
         "The solution for the 1st part of the puzzle from day 06 is '{}'!",
-        result_day06_part1.count
+        result_day06_part1
     );
     let swarm = LanternFishSwarm::init(input.clone());
     let result_day06_part1 = swarm.simulation(256);
     println!(
         "The solution for the 2nd part of the puzzle from day 06 is '{}'!",
-        result_day06_part1.count
+        result_day06_part1
     );
 }
 
 #[derive(Debug, PartialEq)]
 struct LanternFishSwarm {
-    fishes: Vec<i32>,
+    fishes: Vec<i8>,
     count: i32,
 }
 
@@ -36,13 +36,13 @@ impl LanternFishSwarm {
             .next()
             .unwrap()
             .split(',')
-            .map(|f| f.parse::<i32>().unwrap())
-            .collect::<Vec<i32>>();
+            .map(|f| f.parse::<i8>().unwrap())
+            .collect::<Vec<i8>>();
         let count = fishes.len() as i32;
         LanternFishSwarm { fishes, count }
     }
 
-    fn simulation(self, days: i32) -> LanternFishSwarm {
+    fn simulation(self, days: i32) -> usize {
         let mut fishes_state = self.fishes.clone();
         for d in 0..days {
             println!("Calculate solution for day {}", d);
@@ -56,9 +56,7 @@ impl LanternFishSwarm {
             }
         }
 
-        let fishes = fishes_state;
-        let count = fishes.len() as i32;
-        LanternFishSwarm { fishes, count }
+        fishes_state.len()
     }
 }
 
@@ -72,7 +70,7 @@ mod tests {
         let after_day01 = vec![2, 3, 2, 0, 1];
         let swarm = LanternFishSwarm::init(input.clone());
         let simulation = swarm.simulation(1);
-        assert_eq!(after_day01, simulation.fishes);
+        assert_eq!(after_day01.len(), simulation);
     }
 
     #[test]
@@ -81,7 +79,7 @@ mod tests {
         let after_day02 = vec![1, 2, 1, 6, 0, 8];
         let swarm = LanternFishSwarm::init(input.clone());
         let simulation = swarm.simulation(2);
-        assert_eq!(after_day02, simulation.fishes);
+        assert_eq!(after_day02.len(), simulation);
     }
 
     #[test]
@@ -90,7 +88,7 @@ mod tests {
         let after_day03 = vec![0, 1, 0, 5, 6, 7, 8];
         let swarm = LanternFishSwarm::init(input.clone());
         let simulation = swarm.simulation(3);
-        assert_eq!(after_day03, simulation.fishes);
+        assert_eq!(after_day03.len(), simulation);
     }
 
     #[test]
@@ -99,7 +97,7 @@ mod tests {
         let after_day12 = vec![5, 6, 5, 3, 4, 5, 6, 0, 0, 1, 5, 6, 7, 7, 7, 8, 8];
         let swarm = LanternFishSwarm::init(input.clone());
         let simulation = swarm.simulation(12);
-        assert_eq!(after_day12, simulation.fishes);
+        assert_eq!(after_day12.len(), simulation);
     }
 
     #[test]
@@ -110,6 +108,6 @@ mod tests {
         ];
         let swarm = LanternFishSwarm::init(input.clone());
         let simulation = swarm.simulation(18);
-        assert_eq!(after_day18, simulation.fishes);
+        assert_eq!(after_day18.len(), simulation);
     }
 }
