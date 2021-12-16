@@ -35,3 +35,5 @@ Day 5: Hydrothermal Venture [Part1]
 Day 6: Lanternfish [Part1]
 
 Day 7: The Treachery of Whales [Part1, Part2]
+
+Day 8: Seven Segment Search [Part1]
