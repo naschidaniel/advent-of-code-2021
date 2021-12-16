@@ -9,7 +9,8 @@ fn read_input_file() -> String {
 
 pub fn solution_day08() {
     let input = read_input_file();
-    let result_day08_part1 = Digits::init(input);
+    let values = Digits::init(input);
+    let result_day08_part1 = values.count_1_4_7_8();
     println!(
         "The solution for the 1st part of the puzzle from day 08 is '{:?}'!",
         result_day08_part1
@@ -37,19 +38,19 @@ struct Digits {
 
 impl Digits {
     fn init(input: String) -> Self {
-        println!("{}", input);
         let pattern = input
             .lines()
-            .map(|x|
-            x.split('|')
-            .nth(1)
-            .unwrap()
-            .trim()
-            .split(" ")
-            .map(|x| x.len())
-            .collect::<Vec<usize>>()).collect::<Vec<_>>();
-        
-        println!("{:?}", pattern);
+            .map(|x| {
+                x.split('|')
+                    .nth(1)
+                    .unwrap()
+                    .trim()
+                    .split(" ")
+                    .map(|x| x.len())
+                    .collect::<Vec<usize>>()
+            })
+            .collect::<Vec<_>>();
+
         Digits { pattern }
     }
 
@@ -59,11 +60,29 @@ impl Digits {
             .map(|f| match f {
                 2 => 1,
                 4 => 4,
-                7 => 3,
-                8 => 7,
+                3 => 7,
+                7 => 8,
                 _ => -99,
             })
             .collect::<Vec<i8>>()
+    }
+
+    fn count_1_4_7_8(self) -> usize {
+        let mut count = 0;
+        for i in 0..self.pattern.len() {
+            let select_values = self
+                .decode_digits(i)
+                .iter()
+                .map(|x| x != &-99)
+                .collect::<Vec<_>>();
+            count += select_values
+                .iter()
+                .filter(|x| x == &&true)
+                .collect::<Vec<_>>()
+                .iter()
+                .count();
+        }
+        count
     }
 }
 
@@ -73,7 +92,8 @@ mod tests {
 
     #[test]
     fn test_decode_digits() {
-        let input = "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
+        let input =
+            "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
 edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
 fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
 fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb
@@ -83,15 +103,36 @@ dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbc
 bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
 egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
-".to_string();
+"
+            .to_string();
         let values = Digits::init(input);
         let line_00 = values.decode_digits(0);
-        assert_eq!(vec![3, -99, -99, 4], line_00);
+        assert_eq!(vec![8, -99, -99, 4], line_00);
         let line_01 = values.decode_digits(1);
-        assert_eq!(vec![-99, -99, 3, 1], line_01);
+        assert_eq!(vec![-99, 7, 8, 1], line_01);
         let line_02 = values.decode_digits(2);
-        assert_eq!(vec![1, 1, -99, -99], line_02);
+        assert_eq!(vec![1, 1, -99, 7], line_02);
         let line_03 = values.decode_digits(3);
         assert_eq!(vec![-99, -99, -99, 1], line_03);
+    }
+
+    #[test]
+    fn test_count_1_4_7_8() {
+        let input =
+            "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
+edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
+fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
+fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb
+aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea
+fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb
+dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe
+bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
+egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
+gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
+"
+            .to_string();
+        let values = Digits::init(input);
+        let result = values.count_1_4_7_8();
+        assert_eq!(26, result);
     }
 }
