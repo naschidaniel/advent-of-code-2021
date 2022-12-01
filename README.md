@@ -1,4 +1,4 @@
-# Code of Advent 2021 [![cargo test](https://github.com/naschidaniel/advent-of-code/actions/workflows/rstest.yml/badge.svg)](https://github.com/naschidaniel/advent-of-code/actions/workflows/rstest.yml)
+# Code of Advent 2021 [![cargo test](https://github.com/naschidaniel/advent-of-code-2021/actions/workflows/rstest.yml/badge.svg)](https://github.com/naschidaniel/advent-of-code-2021/actions/workflows/rstest.yml)
 
 ## About
 
